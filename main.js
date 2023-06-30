@@ -21,7 +21,10 @@ function idGen(){
   
    return id;
   }
-  
+  addTask("new task3");
 
+  for (var i = 0; i < database.tasks.length; i++) {
+    document.getElementsByTagName("table")[0].innerHTML+= "<div class='todo-item'>"+database.tasks[i].todo+"</div>"
+  };
 // addTask("new task3");
 // deleteTask("4f5eef");
