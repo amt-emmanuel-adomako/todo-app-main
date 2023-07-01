@@ -1,11 +1,7 @@
 {
     "tasks":[
-        {"id":"12df5e", "todo":"task to be done", "active":true, "completed":false},
-        {"id":"e4s5r2", "todo":"task to be done", "active":true, "completed":false},
-        {"id":"4f5eef", "todo":"task to be done", "active":true, "completed":false},
-        {"id":"sdfssd", "todo":"task to be done", "active":true, "completed":false},
-        {"id":"sldf5f", "todo":"task to be done", "active":true, "completed":false},
-        {"id":"dfs5f8", "todo":"task to be done", "active":true, "completed":false},
-        {"id":"hhh6r5", "todo":"task to be done", "active":true, "completed":false}
+        {"id":"12df5e", "todo":"task 1 to be done", "active":true, "completed":false},
+        {"id":"e4s5r2", "todo":"task 2 to be done", "active":true, "completed":false},
+        {"id":"4f5eef", "todo":"task 3 to be done", "active":true, "completed":false}
     ]
 }
