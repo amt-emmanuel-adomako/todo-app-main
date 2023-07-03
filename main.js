@@ -41,55 +41,65 @@ function modifyListProperties (todoList) {
 }
 
 
-function refresh() {
+function refresh(data) {
     // document.getElementsByTagName("ul")[0].innerHTML = ''
-    for (var i = 0; i < database.tasks.length; i++) {
-      if (database.tasks[i].completed) {
+    document.getElementById("itemCount").innerHTML=''
+    let itemsLeft=0
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].completed) {
         document.getElementsByTagName("ul")[0].innerHTML+= 
         `<li>
-          <div id=${database.tasks[i].id} class="circle item-checkable">
+          <div id=${data[i].id} class="circle item-checkable">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9"><path fill="none" stroke="#FFF" stroke-width="2" d="M1 4.304L3.696 7l6-6"/></svg>
           </div>
-          <span id=${database.tasks[i].id+"t"} class="text-completed">${database.tasks[i].todo}</span>
-          <svg id= ${database.tasks[i].id+"remove"} class="remove" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path fill="#494C6B" fill-rule="evenodd" d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"/></svg>
+          <span id=${data[i].id+"t"} class="text-completed">${data[i].todo}</span>
+          <svg id= ${data[i].id+"remove"} class="remove" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path fill="#494C6B" fill-rule="evenodd" d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"/></svg>
         </li>`
       }
       else{
+        itemsLeft=itemsLeft+1
           document.getElementsByTagName("ul")[0].innerHTML+= 
           `<li>
-            <div id=${database.tasks[i].id} class="circle">
+            <div id=${data[i].id} class="circle">
               <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9"><path fill="none" stroke="#FFF" stroke-width="2" d="M1 4.304L3.696 7l6-6"/></svg>
             </div>
-            <span id=${database.tasks[i].id+"t"}>${database.tasks[i].todo}</span>
-            <svg id= ${database.tasks[i].id+"remove"} class="remove" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path fill="#494C6B" fill-rule="evenodd" d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"/></svg>
+            <span id=${data[i].id+"t"}>${data[i].todo}</span>
+            <svg id= ${data[i].id+"remove"} class="remove" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path fill="#494C6B" fill-rule="evenodd" d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"/></svg>
           </li>`
         }
       }
-      for (let j = 0; j < database.tasks.length; j++) {
-        document.getElementById(database.tasks[j].id).addEventListener("click",(e)=>{
-          database.tasks[j].completed =!database.tasks[j].completed
-          if (database.tasks[j].completed === true) {
-            document.getElementById(database.tasks[j].id).classList.add("item-checkable")
-            document.getElementById(database.tasks[j].id+'t').classList.add("text-completed")
+      for (let j = 0; j < data.length; j++) {
+        document.getElementById(data[j].id).addEventListener("click",(e)=>{
+          data[j].completed =!data[j].completed
+          data[j].active =!data[j].active
+          if (data[j].completed === true) {
+            document.getElementById(data[j].id).classList.add("item-checkable")
+            document.getElementById(data[j].id+'t').classList.add("text-completed")
+            document.getElementsByTagName("ul")[0].innerHTML = ''
+            refresh(data)
+            modifyListProperties(document.getElementById("sortlist"))
           }
           else{
-            document.getElementById(database.tasks[j].id).classList.remove("item-checkable")
-            document.getElementById(database.tasks[j].id+'t').classList.remove("text-completed")
+            document.getElementById(data[j].id).classList.remove("item-checkable")
+            document.getElementById(data[j].id+'t').classList.remove("text-completed")
+            document.getElementsByTagName("ul")[0].innerHTML = ''
+            refresh(data)
+            modifyListProperties(document.getElementById("sortlist"))
           }
-          // console.log(database.tasks[j]);
+          // console.log(data[j]);
         })
 
-        document.getElementById(database.tasks[j].id+"remove").addEventListener("click",(e)=>{
-          deleteTask(database.tasks[j].id)
+        document.getElementById(data[j].id+"remove").addEventListener("click",(e)=>{
+          deleteTask(data[j].id)
         })
       }
-
-      
+      document.getElementById("itemCount").innerHTML = itemsLeft+" items left"
+      document.getElementById("unsorted").classList.add("active")
 }
 function addTask(taskname) {
     database.tasks.push({"id": idGen(), "todo":taskname, "active":true, "completed":false})
     document.getElementsByTagName("ul")[0].innerHTML = ''
-    refresh()
+    refresh(database.tasks)
     modifyListProperties(document.getElementById("sortlist"))
     console.log(database)
 }
@@ -101,7 +111,7 @@ function deleteTask(id) {
     console.log(database.tasks);
     // console.log(arr2); 
     document.getElementsByTagName("ul")[0].innerHTML = ''
-    refresh()
+    refresh(database.tasks)
     modifyListProperties(document.getElementById("sortlist"))
 }
 
@@ -119,6 +129,42 @@ function idGen(){
 
 
 
+  document.getElementById("sortActive").addEventListener(
+    "click",
+    (e) => {
+      const arr2 = database.tasks.filter(x => x.active !== false);
+      document.getElementsByTagName("ul")[0].innerHTML = ''
+      refresh(arr2)
+      modifyListProperties(document.getElementById("sortlist"))
+      document.getElementById("unsorted").classList.remove("active")
+      document.getElementById("sortCompleted").classList.remove("active")
+      document.getElementById("sortActive").classList.add("active")
+  });
+
+  document.getElementById("sortCompleted").addEventListener(
+    "click",
+    (e) => {
+      const arr2 = database.tasks.filter(x => x.active === false);
+      document.getElementsByTagName("ul")[0].innerHTML = ''
+      refresh(arr2)
+      modifyListProperties(document.getElementById("sortlist"))
+      document.getElementById("unsorted").classList.remove("active")
+      document.getElementById("sortCompleted").classList.add("active")
+      document.getElementById("sortActive").classList.remove("active")
+  });
+
+  document.getElementById("unsorted").addEventListener(
+    "click",
+    (e) => {
+      document.getElementsByTagName("ul")[0].innerHTML = ''
+      refresh(database.tasks)
+      modifyListProperties(document.getElementById("sortlist"))
+      document.getElementById("unsorted").classList.add("active")
+      document.getElementById("sortCompleted").classList.remove("active")
+      document.getElementById("sortActive").classList.remove("active")
+  });
+
+
 
 document.getElementById("addTodo").addEventListener(
   "keyup",
@@ -129,7 +175,7 @@ document.getElementById("addTodo").addEventListener(
       document.getElementById("addTodo").value = ''
     }
 });
-refresh()
+refresh(database.tasks)
 modifyListProperties(document.getElementById("sortlist"))
 // for (let j = 0; j < database.tasks.length; j++) {
 //   document.getElementById(database.tasks[j].id).addEventListener("click",(e)=>{
