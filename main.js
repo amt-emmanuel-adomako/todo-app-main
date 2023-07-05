@@ -1,5 +1,6 @@
 import database from './fake-api.json' assert { type: "json" };
 
+let darkModeBool=false;
 function modifyListProperties (todoList) {
   todoList.classList.add("task-list");
   let items = todoList.getElementsByTagName("li"), current = null;
@@ -40,7 +41,6 @@ function modifyListProperties (todoList) {
   }
 }
 
-
 function refresh(data) {
     // document.getElementsByTagName("ul")[0].innerHTML = ''
     document.getElementById("itemCount").innerHTML=''
@@ -59,9 +59,9 @@ function refresh(data) {
       else{
         itemsLeft=itemsLeft+1
           document.getElementsByTagName("ul")[0].innerHTML+= 
-          `<li>
+          `<li class="task-list-litemode">
             <div id=${data[i].id} class="circle">
-              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9"><path fill="none" stroke="#FFF" stroke-width="2" d="M1 4.304L3.696 7l6-6"/></svg>
+              <svg style="display:none" xmlns="http://www.w3.org/2000/svg" width="11" height="9"><path fill="none" stroke="#FFF" stroke-width="2" d="M1 4.304L3.696 7l6-6"/></svg>
             </div>
             <span id=${data[i].id+"t"}>${data[i].todo}</span>
             <svg id= ${data[i].id+"remove"} class="remove" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path fill="#494C6B" fill-rule="evenodd" d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"/></svg>
@@ -95,7 +95,13 @@ function refresh(data) {
       }
       document.getElementById("itemCount").innerHTML = itemsLeft+" items left"
       document.getElementById("unsorted").classList.add("active")
+      if (darkModeBool) {
+        darkMode()    
+      } else {
+        lightMode()  
+      }
 }
+
 function addTask(taskname) {
     database.tasks.push({"id": idGen(), "todo":taskname, "active":true, "completed":false})
     document.getElementsByTagName("ul")[0].innerHTML = ''
@@ -125,9 +131,21 @@ function idGen(){
    return id;
   }
 
+function deleteAllComplete(params) {
+  for (let i = 0; i < database.tasks.length; i++) {
+    if (database.tasks[i].completed) {
+      deleteTask(database.tasks[i].id)
+    }
+    
+  }
+}
 
-
-
+document.getElementById("clearCompleted").addEventListener(
+  "click",
+  (e) => {
+    deleteAllComplete()
+    document.getElementById("sortCompleted").classList.remove("active")
+});
 
   document.getElementById("sortActive").addEventListener(
     "click",
@@ -163,30 +181,72 @@ function idGen(){
       document.getElementById("sortCompleted").classList.remove("active")
       document.getElementById("sortActive").classList.remove("active")
   });
+function darkMode() {
+  console.log("entering dark mode")
+    document.getElementsByTagName("body")[0].classList.add("body-dark-mode")
+    document.getElementById("lightDark").classList.remove("list-form-litemode")
+    document.getElementById("lightDark").classList.add("list-form-darkmode")
+    document.getElementById("inputField").classList.remove("input-field-litemode")
+    document.getElementById("inputField").classList.add("input-field-darkmode")
+    document.getElementById("addTodo").classList.remove("add-todo-litemode")
+    document.getElementById("addTodo").classList.add("add-todo-darkmode")
+    let elements = document.querySelectorAll('li');
+    elements.forEach(element => {
+      element.classList.add("task-list-darkmode")  
+    });
+
+}
+
+function lightMode() {
+  console.log("entering dark mode")
+    document.getElementsByTagName("body")[0].classList.remove("body-dark-mode")
+    document.getElementById("lightDark").classList.remove("list-form-darkmode")
+    document.getElementById("lightDark").classList.add("list-form-litemode")
+    document.getElementById("inputField").classList.add("input-field-litemode")
+    document.getElementById("inputField").classList.remove("input-field-darkmode")
+    document.getElementById("addTodo").classList.add("add-todo-litemode")
+    document.getElementById("addTodo").classList.remove("add-todo-darkmode")
+    let elements = document.querySelectorAll('li');
+    elements.forEach(element => {
+      element.classList.remove("task-list-darkmode")  
+    });
+
+}
 
 
+document.getElementById("darkMode").addEventListener("click", ()=>{
+  darkModeBool = !darkModeBool
+  console.log(darkModeBool)
+  if (darkModeBool) {
+    darkMode()
+  } else {
+    lightMode()
+  }
+  
+})
+//   document.getElementById("darkMode").addEventListener("click", (e)=>{
+//     console.log("entering dark mode")
+//     document.getElementsByTagName("body")[0].classList.add("body-dark-mode")
+//     document.getElementById("lightDark").classList.remove("list-form-litemode")
+//     document.getElementById("lightDark").classList.add("list-form-darkmode")
+//     document.getElementById("inputField").classList.remove("input-field-litemode")
+//     document.getElementById("inputField").classList.add("input-field-darkmode")
+//     document.getElementById("addTodo").classList.remove("add-todo-litemode")
+//     document.getElementById("addTodo").classList.add("add-todo-darkmode")
+//     let elements = document.querySelectorAll('li');
+//     elements.forEach(element => {
+//       element.classList.add("task-list-darkmode")  
+//     });
+//  })
 
-document.getElementById("addTodo").addEventListener(
-  "keyup",
-  (e) => {
-    if (e.key === "Enter") {
-      // console.log(document.getElementById("addTodo").value)
-      addTask(document.getElementById("addTodo").value);
-      document.getElementById("addTodo").value = ''
-    }
-});
-refresh(database.tasks)
-modifyListProperties(document.getElementById("sortlist"))
-// for (let j = 0; j < database.tasks.length; j++) {
-//   document.getElementById(database.tasks[j].id).addEventListener("click",(e)=>{
-//     database.tasks[j].completed =!database.tasks[j].completed
-//     if (database.tasks[j].completed === true) {
-//       document.getElementById(database.tasks[j].id).classList.add("item-checkable")
-//     }
-//     else{
-//       document.getElementById(database.tasks[j].id).classList.remove("item-checkable")
-//     }
-//     console.log(database.tasks[j]);
-//     // refresh()
-//   })
-// }
+  document.getElementById("addTodo").addEventListener(
+    "keyup",
+    (e) => {
+      if (e.key === "Enter" && document.getElementById("addTodo").value) {
+        // console.log(document.getElementById("addTodo").value)
+        addTask(document.getElementById("addTodo").value);
+        document.getElementById("addTodo").value = ''
+      }
+  });
+  refresh(database.tasks)
+  modifyListProperties(document.getElementById("sortlist"))

@@ -1,4 +1,6 @@
 {
+    "old-tasks":[],
+    
     "tasks":[
         {"id":"12df5e", "todo":"task 1 to be done", "active":false, "completed":true},
         {"id":"e4s5r2", "todo":"task 2 to be done", "active":true, "completed":false},
