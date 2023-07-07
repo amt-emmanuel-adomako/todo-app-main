@@ -8,12 +8,29 @@ body{
   margin: 0;
 }
 
+.note{
+  color: #9495A5;
+  text-align: center;
+  font-family: Josefin Sans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.194px;
+  margin: auto 50px;
+}
+
 .container{
+  /* opacity: 0.25; */
+  /* background: url('images/bg-desktop-light.jpg'), lightgray 0px 0px / 100% 100% no-repeat; */
   background-image: url('images/bg-desktop-light.jpg');
   background-repeat: no-repeat;
+  background-size: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100vh;
+  background-color: transparent;
 }
 
 .title-bar{
@@ -29,6 +46,15 @@ body{
   width: 25.113px;
   height: 26px;
   margin-left: auto;
+  cursor: pointer;
+}
+
+.show{
+  display: block;
+}
+
+.hide{
+  display: none;
 }
 
 .input-field{
@@ -88,10 +114,11 @@ body{
 .list-form{
   overflow-y: scroll;
   width: 540px;
-  /* max-height: 439px; */
   max-height: 384px;
   flex-shrink: 0;
   border-radius: 5px;
+  box-shadow: 0px 35px 50px -15px rgba(194, 195, 214, 0.50);
+
 }
 
 .list-form-litemode{
@@ -266,6 +293,7 @@ body{
   .list-form-darkmode{
     background: #25273D;
     color: #C8CBE7;
+    box-shadow: 0px 35px 50px -15px rgba(0, 0, 0, 0.50);
     letter-spacing: -0.25px;
   }
   .body-dark-mode{
@@ -273,4 +301,103 @@ body{
   }
   .dark-mode-bs{
     box-shadow: 0px 35px 50px -15px rgba(0, 0, 0, 0.50);
+  }
+.sorting-container-mobile{
+  display: none;
+}
+
+  @media only screen and (max-width: 375px) {
+    body{
+      font-size: 12px;
+    }
+    .input-field{
+      width: 327px;
+      height: 48px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .circle{
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+      margin: 16px 20px;
+    }
+
+    .container{
+      background-size: 100%  185px;
+    }
+    .list-form {
+      width: 327px;
+    }
+    
+    .title-bar{
+      width: 327px;
+      height: 20px;;
+      margin: 40px 0px 40px 0px;
+    }
+
+    #addTodo{
+      font-size: 12px;
+      width: 85%;
+      border: none;
+      background-color: transparent;
+    }
+
+    .todo-item{
+      height: 48px;
+      /* font-size: 18px; */
+    }
+
+    .task-list li {
+      padding: 0px;
+      
+    }
+
+    .sorting-container {
+      display: flex;
+      width: 327px;
+      justify-content: center;
+    }
+
+    /* .container{
+      background-image: url('images/bg-desktop-light.jpg');
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      background-color: #FAFAFA;;
+    } */
+
+    #sortCompleted{
+      display: none;
+    }
+    
+    #sortActive{
+      display: none;
+    }
+
+    #unsorted{
+      display: none;
+    }
+
+    .sorting-container-mobile{
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+      width: 327px;
+      height: 48px;
+      border-radius: 5px;
+      background: #FFF;
+      /* box-shadow: 0px 35px 50px -15px rgba(194, 195, 214, 0.50); */
+
+    }
+
+    .remove{
+      margin-left: auto;
+      display: block;
+      margin-right: 20px;
+    }
+    
   }

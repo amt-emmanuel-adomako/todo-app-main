@@ -181,6 +181,41 @@ document.getElementById("clearCompleted").addEventListener(
       document.getElementById("sortCompleted").classList.remove("active")
       document.getElementById("sortActive").classList.remove("active")
   });
+
+  document.getElementById("sortActive-m").addEventListener(
+    "click",
+    (e) => {
+      const arr2 = database.tasks.filter(x => x.active !== false);
+      document.getElementsByTagName("ul")[0].innerHTML = ''
+      refresh(arr2)
+      modifyListProperties(document.getElementById("sortlist"))
+      document.getElementById("unsorted-m").classList.remove("active")
+      document.getElementById("sortCompleted-m").classList.remove("active")
+      document.getElementById("sortActive-m").classList.add("active")
+  });
+
+  document.getElementById("sortCompleted-m").addEventListener(
+    "click",
+    (e) => {
+      const arr2 = database.tasks.filter(x => x.active === false);
+      document.getElementsByTagName("ul")[0].innerHTML = ''
+      refresh(arr2)
+      modifyListProperties(document.getElementById("sortlist"))
+      document.getElementById("unsorted-m").classList.remove("active")
+      document.getElementById("sortCompleted-m").classList.add("active")
+      document.getElementById("sortActive-m").classList.remove("active")
+  });
+
+  document.getElementById("unsorted-m").addEventListener(
+    "click",
+    (e) => {
+      document.getElementsByTagName("ul")[0].innerHTML = ''
+      refresh(database.tasks)
+      modifyListProperties(document.getElementById("sortlist"))
+      document.getElementById("unsorted-m").classList.add("active")
+      document.getElementById("sortCompleted-m").classList.remove("active")
+      document.getElementById("sortActive-m").classList.remove("active")
+  });
 function darkMode() {
   console.log("entering dark mode")
     document.getElementsByTagName("body")[0].classList.add("body-dark-mode")
@@ -190,15 +225,20 @@ function darkMode() {
     document.getElementById("inputField").classList.add("input-field-darkmode")
     document.getElementById("addTodo").classList.remove("add-todo-litemode")
     document.getElementById("addTodo").classList.add("add-todo-darkmode")
+    document.getElementById("lightMode").classList.remove("hide")
+    document.getElementById("lightMode").classList.add("show")
+    document.getElementById("darkMode").classList.remove("show")
+    document.getElementById("darkMode").classList.add("hide")
+    document.getElementById("scMoble").classList.add("list-form-darkmode")
+    document.getElementById("scMoble").setAttribute("style","background-color:#25273D; color: #9495A5;")
     let elements = document.querySelectorAll('li');
     elements.forEach(element => {
       element.classList.add("task-list-darkmode")  
     });
-
 }
 
 function lightMode() {
-  console.log("entering dark mode")
+  console.log("entering light mode")
     document.getElementsByTagName("body")[0].classList.remove("body-dark-mode")
     document.getElementById("lightDark").classList.remove("list-form-darkmode")
     document.getElementById("lightDark").classList.add("list-form-litemode")
@@ -206,6 +246,11 @@ function lightMode() {
     document.getElementById("inputField").classList.remove("input-field-darkmode")
     document.getElementById("addTodo").classList.add("add-todo-litemode")
     document.getElementById("addTodo").classList.remove("add-todo-darkmode")
+    document.getElementById("lightMode").classList.remove("show")
+    document.getElementById("lightMode").classList.add("hide")
+    document.getElementById("darkMode").classList.remove("hide")
+    document.getElementById("darkMode").classList.add("show")
+    document.getElementById("scMoble").setAttribute("style","background-color:#FFF;")
     let elements = document.querySelectorAll('li');
     elements.forEach(element => {
       element.classList.remove("task-list-darkmode")  
@@ -214,7 +259,19 @@ function lightMode() {
 }
 
 
+
 document.getElementById("darkMode").addEventListener("click", ()=>{
+  darkModeBool = !darkModeBool
+  console.log(darkModeBool)
+  if (darkModeBool) {
+    darkMode()
+  } else {
+    lightMode()
+  }
+  
+})
+
+document.getElementById("lightMode").addEventListener("click", ()=>{
   darkModeBool = !darkModeBool
   console.log(darkModeBool)
   if (darkModeBool) {
