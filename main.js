@@ -132,12 +132,29 @@ function idGen(){
   }
 
 function deleteAllComplete(params) {
-  for (let i = 0; i < database.tasks.length; i++) {
-    if (database.tasks[i].completed) {
-      deleteTask(database.tasks[i].id)
+  var filter = {
+    completed: true
+  };
+  
+  
+  database.tasks= database.tasks.filter(function(item) {
+    for (var key in filter) {
+      if (item[key] === filter[key])
+      // console.log(key, item[key], filter)
+        return false;
     }
+    return true;
+  });
+  document.getElementsByTagName("ul")[0].innerHTML = ''
+  refresh(database.tasks)
+  modifyListProperties(document.getElementById("sortlist"))
+  // console.log(users)
+  // for (let i = 0; i < database.tasks.length; i++) {
+  //   if (database.tasks[i].completed) {
+  //     deleteTask(database.tasks[i].id)
+  //   }
     
-  }
+  // }
 }
 
 document.getElementById("clearCompleted").addEventListener(
@@ -238,7 +255,8 @@ function darkMode() {
 }
 
 function lightMode() {
-  console.log("entering light mode")
+  let elements = document.querySelectorAll('li');
+  // console.log("entering light mode", database.tasks)
     document.getElementsByTagName("body")[0].classList.remove("body-dark-mode")
     document.getElementById("lightDark").classList.remove("list-form-darkmode")
     document.getElementById("lightDark").classList.add("list-form-litemode")
@@ -251,7 +269,7 @@ function lightMode() {
     document.getElementById("darkMode").classList.remove("hide")
     document.getElementById("darkMode").classList.add("show")
     document.getElementById("scMoble").setAttribute("style","background-color:#FFF;")
-    let elements = document.querySelectorAll('li');
+    // let elements = document.querySelectorAll('li');
     elements.forEach(element => {
       element.classList.remove("task-list-darkmode")  
     });

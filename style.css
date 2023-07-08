@@ -295,9 +295,11 @@ body{
     color: #C8CBE7;
     box-shadow: 0px 35px 50px -15px rgba(0, 0, 0, 0.50);
     letter-spacing: -0.25px;
+    transition: background 1s;
   }
   .body-dark-mode{
     background: #171823;
+    transition: background 1s;
   }
   .dark-mode-bs{
     box-shadow: 0px 35px 50px -15px rgba(0, 0, 0, 0.50);
