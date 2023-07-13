@@ -165,13 +165,17 @@ function refresh(data) {
           // console.log(data[j]);
         })
         document.getElementById(data[j].id).addEventListener("mouseover",()=>{
-          document.getElementById(data[j].id).classList.remove("circle")
-          document.getElementById(data[j].id).classList.add("circle-hover")
+          if (!data[j].completed) {
+            document.getElementById(data[j].id).classList.remove("circle")
+            document.getElementById(data[j].id).classList.add("circle-hover")
+          }
         })
 
         document.getElementById(data[j].id).addEventListener("mouseleave",()=>{
+          if (!data[j].completed) {
           document.getElementById(data[j].id).classList.add("circle")
           document.getElementById(data[j].id).classList.remove("circle-hover")
+          }
         })
 
         document.getElementById(data[j].id+"remove").addEventListener("click",(e)=>{
