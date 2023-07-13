@@ -111,6 +111,19 @@ body{
   align-items: center;
 }
 
+.circle-hover{
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  margin: 20px 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(white, white) padding-box, linear-gradient(to bottom right, hsl(192, 100%, 67%), hsl(280, 87%, 65%)) border-box;
+  border-radius: 50%;
+  border: 1px solid transparent;
+}
+
 .list-form{
   overflow-y: scroll;
   width: 540px;

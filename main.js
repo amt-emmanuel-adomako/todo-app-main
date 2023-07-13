@@ -1,40 +1,56 @@
 import database from './fake-api.json' assert { type: "json" };
 
 let darkModeBool=false;
+let initialIndex = 0 , initalElement, currentElement, state ="all"
+
 function modifyListProperties (todoList) {
   todoList.classList.add("task-list");
   let items = todoList.getElementsByTagName("li"), current = null;
 // console.log(items)
-  for (let i of items) {
-    i.draggable = true;
-    i.ondragstart = e => {
-      current = i;
+  for (let i=0; i<items.length; i++) {
+    items[i].draggable = true;
+    items[i].ondragstart = e => {
+      initialIndex = i
+      console.log(items[i].innerText);
+      current = items[i];
       for (let it of items) {
         if (it != current) { it.classList.add("hint"); }
       }
     };
-    i.ondragenter = e => {
-      if (i != current) { i.classList.add("active"); }
+    items[i].ondragenter = e => {
+      if (items[i] != current) { items[i].classList.add("active"); }
     };
-    i.ondragleave = () => i.classList.remove("active");
+    items[i].ondragleave = () => items[i].classList.remove("active");
 
-    i.ondragend = () => { for (let it of items) {
+    items[i].ondragend = () => { for (let it of items) {
         it.classList.remove("hint");
         it.classList.remove("active");
     }};
-    i.ondragover = e => e.preventDefault();
-    i.ondrop = e => {
+    items[i].ondragover = e => e.preventDefault();
+    items[i].ondrop = e => {
       e.preventDefault();
-      if (i != current) {
+      if (items[i] != current) {
         let currentpos = 0, droppedpos = 0;
         for (let it=0; it<items.length; it++) {
           if (current == items[it]) { currentpos = it; }
-          if (i == items[it]) { droppedpos = it; }
+          if (items[i] == items[it]) { droppedpos = it;
+             initalElement = database.tasks[initialIndex]
+             currentElement = database.tasks[it]
+             database.tasks[it]= initalElement
+             database.tasks[initialIndex] = currentElement
+             
+          }
         }
         if (currentpos < droppedpos) {
-          i.parentNode.insertBefore(current, i.nextSibling);
+          items[i].parentNode.insertBefore(current, items[i].nextSibling);
+          document.getElementsByTagName("ul")[0].innerHTML = ''
+          refresh(database.tasks)
+          modifyListProperties(document.getElementById("sortlist"))
         } else {
-          i.parentNode.insertBefore(current, i);
+          items[i].parentNode.insertBefore(current, items[i]);
+          document.getElementsByTagName("ul")[0].innerHTML = ''
+          refresh(database.tasks)
+          modifyListProperties(document.getElementById("sortlist"))
         }
       }
     };
@@ -73,11 +89,42 @@ function refresh(data) {
           data[j].completed =!data[j].completed
           data[j].active =!data[j].active
           if (data[j].completed === true) {
+            console.log(data);
+            console.log(database.tasks);
             document.getElementById(data[j].id).classList.add("item-checkable")
             document.getElementById(data[j].id+'t').classList.add("text-completed")
             document.getElementsByTagName("ul")[0].innerHTML = ''
             refresh(data)
             modifyListProperties(document.getElementById("sortlist"))
+            if (state === "all") {
+              console.log(state);
+            document.getElementsByTagName("ul")[0].innerHTML = ''
+            refresh(database.tasks)
+            modifyListProperties(document.getElementById("sortlist"))
+            document.getElementById("unsorted").classList.add("active")
+            document.getElementById("sortCompleted").classList.remove("active")
+            document.getElementById("sortActive").classList.remove("active")
+            }
+             if (state === "active") {
+              console.log(state);
+              const arr2 = database.tasks.filter(x => x.active !== false);
+              document.getElementsByTagName("ul")[0].innerHTML = ''
+              refresh(arr2)
+              modifyListProperties(document.getElementById("sortlist"))
+              document.getElementById("unsorted").classList.remove("active")
+              document.getElementById("sortCompleted").classList.remove("active")
+              document.getElementById("sortActive").classList.add("active")
+            } 
+            if(state==="completed"){
+              console.log(state);
+              const arr2 = database.tasks.filter(x => x.active === false);
+              document.getElementsByTagName("ul")[0].innerHTML = ''
+              refresh(arr2)
+              modifyListProperties(document.getElementById("sortlist"))
+              document.getElementById("unsorted").classList.remove("active")
+              document.getElementById("sortCompleted").classList.add("active")
+              document.getElementById("sortActive").classList.remove("active")
+            }
           }
           else{
             document.getElementById(data[j].id).classList.remove("item-checkable")
@@ -85,8 +132,46 @@ function refresh(data) {
             document.getElementsByTagName("ul")[0].innerHTML = ''
             refresh(data)
             modifyListProperties(document.getElementById("sortlist"))
+            if (state === "all") {
+              console.log(state);
+            document.getElementsByTagName("ul")[0].innerHTML = ''
+            refresh(database.tasks)
+            modifyListProperties(document.getElementById("sortlist"))
+            document.getElementById("unsorted").classList.add("active")
+            document.getElementById("sortCompleted").classList.remove("active")
+            document.getElementById("sortActive").classList.remove("active")
+            }
+             if (state === "active") {
+              console.log(state);
+              const arr2 = database.tasks.filter(x => x.active !== false);
+              document.getElementsByTagName("ul")[0].innerHTML = ''
+              refresh(arr2)
+              modifyListProperties(document.getElementById("sortlist"))
+              document.getElementById("unsorted").classList.remove("active")
+              document.getElementById("sortCompleted").classList.remove("active")
+              document.getElementById("sortActive").classList.add("active")
+            } 
+            if(state==="completed"){
+              console.log(state);
+              const arr2 = database.tasks.filter(x => x.active === false);
+              document.getElementsByTagName("ul")[0].innerHTML = ''
+              refresh(arr2)
+              modifyListProperties(document.getElementById("sortlist"))
+              document.getElementById("unsorted").classList.remove("active")
+              document.getElementById("sortCompleted").classList.add("active")
+              document.getElementById("sortActive").classList.remove("active")
+            }
           }
           // console.log(data[j]);
+        })
+        document.getElementById(data[j].id).addEventListener("mouseover",()=>{
+          document.getElementById(data[j].id).classList.remove("circle")
+          document.getElementById(data[j].id).classList.add("circle-hover")
+        })
+
+        document.getElementById(data[j].id).addEventListener("mouseleave",()=>{
+          document.getElementById(data[j].id).classList.add("circle")
+          document.getElementById(data[j].id).classList.remove("circle-hover")
         })
 
         document.getElementById(data[j].id+"remove").addEventListener("click",(e)=>{
@@ -168,6 +253,7 @@ document.getElementById("clearCompleted").addEventListener(
     "click",
     (e) => {
       const arr2 = database.tasks.filter(x => x.active !== false);
+      state = "active"
       document.getElementsByTagName("ul")[0].innerHTML = ''
       refresh(arr2)
       modifyListProperties(document.getElementById("sortlist"))
@@ -180,6 +266,7 @@ document.getElementById("clearCompleted").addEventListener(
     "click",
     (e) => {
       const arr2 = database.tasks.filter(x => x.active === false);
+      state = "completed"
       document.getElementsByTagName("ul")[0].innerHTML = ''
       refresh(arr2)
       modifyListProperties(document.getElementById("sortlist"))
@@ -191,6 +278,7 @@ document.getElementById("clearCompleted").addEventListener(
   document.getElementById("unsorted").addEventListener(
     "click",
     (e) => {
+      state = "all"
       document.getElementsByTagName("ul")[0].innerHTML = ''
       refresh(database.tasks)
       modifyListProperties(document.getElementById("sortlist"))
